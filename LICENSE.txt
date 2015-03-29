@@ -1,0 +1,21 @@
+`py_amira_file_reader/` directory
+---------------------------------
+
+The software is copyright (c) Andrew D. Straw.
+
+`tests/data/LHMask.am` file
+---------------------------
+
+The file was downloaded from
+https://github.com/jefferis/AnalysisSuite/raw/2ba75bc9461ae12ec7011f1460b0c17d200dd63b/R/Data/LHMask.am
+and, according to
+https://github.com/jefferis/AnalysisSuite/blob/master/COPYRIGHT , this
+is licensed by the GNU General Public License v2 or later.
+
+`tests/data/tetrahedron.surf` file
+----------------------------------
+
+This file was downloaded from
+https://raw.githubusercontent.com/cran/nat/6ea881968f26bcf1c013b174a2f370ba42a2f51a/tests/testthat/testdata/amira/tetrahedron.surf
+and, according to https://github.com/cran/nat/blob/master/DESCRIPTION
+, this is licensed by the GNU General Public License v3.
