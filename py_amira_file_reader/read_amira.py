@@ -78,7 +78,7 @@ is_bytedata_key = Matcher(re_bytedata_key)
 re_float = re.compile(br'^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$')
 is_number = Matcher(re_float)
 
-re_name = re.compile(br'^[a-zA-Z0-9]+$')
+re_name = re.compile(br'^[a-zA-Z0-9]+(\[\d\])?$')
 is_name = Matcher(re_name)
 
 re_quoted_whitespace_splitter = re.compile(br'(".*")|[ \t\n]')
@@ -143,6 +143,10 @@ class Tokenizer:
                     self.file_info = {'type':'AmiraMesh',
                                       'version':'2.0',
                                       'is_binary':True}
+                elif token[0] == TOKEN_COMMENT and token[1]=='# AmiraMesh 3D ASCII 2.0':
+                    self.file_info = {'type':'AmiraMesh',
+                                      'version':'2.0',
+                                      'is_binary':False}
                 else:
                     warnings.warn('Unknown file type. Parsing may fail.')
             yield token
@@ -253,20 +257,45 @@ class Tokenizer:
                             for key in self.defines:
                                 dim = self.defines[key]
                                 break
-                            encoding='raw'
-                            assert len(dim)==3
-                            size=dim[0]*dim[1]*dim[2]
+                            if self.file_info['is_binary']:
+                                encoding='raw'
+                                assert len(dim)==3
+                                size=dim[0]*dim[1]*dim[2]
+                            else:
+                                size = None
 
-                        binary_buf, self.buf = self.buf[:size], self.buf[size:]
+                        if self.file_info['is_binary']:
+                            binary_buf, self.buf = self.buf[:size], self.buf[size:]
 
-                        if encoding=='raw':
-                            raw_buf = binary_buf
-                        elif encoding=='HxZip':
-                            raw_buf = zlib.decompress(binary_buf)
-                        elif encoding=='HxByteRLE':
-                            raw_buf = rle_decompress(binary_buf)
+                            if encoding=='raw':
+                                raw_buf = binary_buf
+                            elif encoding=='HxZip':
+                                raw_buf = zlib.decompress(binary_buf)
+                            elif encoding=='HxByteRLE':
+                                raw_buf = rle_decompress(binary_buf)
+                            else:
+                                raise ValueError('unknown encoding %r'%encoding)
                         else:
-                            raise ValueError('unknown encoding %r'%encoding)
+                            # ascii encoded file
+                            raw_buf = []
+                            line_idx = 0
+                            while 1:
+                                lsize = self.buf.index('\n')+1
+                                lbuf, self.buf = self.buf[:lsize], self.buf[lsize:]
+                                lbuf = lbuf.strip()
+                                if lbuf=='':
+                                    # done with this section
+                                    break
+                                elements = []
+                                for el in lbuf.strip().split():
+                                    try:
+                                        r = int(el)
+                                    except ValueError as err:
+                                        r = float(el)
+                                    elements.append(r)
+
+                                raw_buf.append( elements )
+                                line_idx += 1
 
                         yield (  TOKEN_BYTEDATA, {'data':raw_buf},  (lineno,startcol), (lineno, endcol), this_line )
                     else:

@@ -27,13 +27,13 @@ def test_ascii_surf():
     assert data['data'][0]['Parameters']['Materials']['Exterior']['id'] == 1
     assert data['data'][1]['Vertices'].shape == (4,3)
 
-def test_binary_am():
+def test_am():
     fnames = ['LHMask.am',
              ]
     for fname in fnames:
-        yield check_binary_am, fname
+        yield check_am, fname
 
-def check_binary_am(fname):
+def check_am(fname):
     data_path = get_data_path(fname)
     data = read_amira.read_amira( data_path )
     size = None
@@ -47,3 +47,12 @@ def check_binary_am(fname):
                     cum = cum*dim_size
                 assert len(row['data'])==cum
     assert size is not None
+
+def test_parse_ascii_mesh():
+    fname = 'hybrid-testgrid-2d.am'
+    data_path = get_data_path(fname)
+    data = read_amira.read_amira( data_path )
+    print('---------------- ascii mesh data -----')
+    import pprint
+    pprint.pprint(data)
+    print('---------------- ascii mesh data done -----')
