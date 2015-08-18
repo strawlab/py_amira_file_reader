@@ -89,6 +89,28 @@ def lim_repr(value):
         full = full[:97]+'...'
     return full
 
+def rle_decompress(buf):
+    result = []
+    idx = 0
+    buflen = len(buf)
+    while idx < buflen:
+        control_byte = ord(buf[idx])
+        idx += 1
+        if control_byte==0:
+            break
+        elif control_byte <= 127:
+            repeats = control_byte
+            new_byte = buf[idx]
+            idx += 1
+            result.append( new_byte*repeats )
+        else:
+            num_bytes = control_byte-128
+            new_bytes = buf[idx:idx+num_bytes]
+            idx += num_bytes
+            result.append( new_bytes )
+    final_result = ''.join(result)
+    return final_result
+
 class Tokenizer:
     def __init__( self, fileobj ):
         self.buf = fileobj.read()
@@ -241,6 +263,10 @@ class Tokenizer:
                             raw_buf = binary_buf
                         elif encoding=='HxZip':
                             raw_buf = zlib.decompress(binary_buf)
+                        elif encoding=='HxByteRLE':
+                            raw_buf = rle_decompress(binary_buf)
+                        else:
+                            raise ValueError('unknown encoding %r'%encoding)
 
                         yield (  TOKEN_BYTEDATA, {'data':raw_buf},  (lineno,startcol), (lineno, endcol), this_line )
                     else:
