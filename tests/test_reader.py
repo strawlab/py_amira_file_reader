@@ -28,11 +28,22 @@ def test_ascii_surf():
     assert data['data'][1]['Vertices'].shape == (4,3)
 
 def test_binary_am():
-    fname = 'LHMask.am'
+    fnames = ['LHMask.am',
+             ]
+    for fname in fnames:
+        yield check_binary_am, fname
+
+def check_binary_am(fname):
     data_path = get_data_path(fname)
     data = read_amira.read_amira( data_path )
-    if read_amira.is_debug():
-        show_result(data)
-
-    # a few spot checks
-    assert data['data'][0]['define']['Lattice'] == [50, 50, 50]
+    size = None
+    for row in data['data']:
+        if 'define' in row:
+            size = row['define']['Lattice']
+        if 'data' in row:
+            if size is not None:
+                cum = 1
+                for dim_size in size:
+                    cum = cum*dim_size
+                assert len(row['data'])==cum
+    assert size is not None
