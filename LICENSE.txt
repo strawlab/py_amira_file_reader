@@ -19,3 +19,11 @@ This file was downloaded from
 https://raw.githubusercontent.com/cran/nat/6ea881968f26bcf1c013b174a2f370ba42a2f51a/tests/testthat/testdata/amira/tetrahedron.surf
 and, according to https://github.com/cran/nat/blob/master/DESCRIPTION
 , this is licensed by the GNU General Public License v3.
+
+`tests/data/hybrid-testgrid-2d.am` file
+---------------------------------------
+
+This file was downloaded from
+https://raw.githubusercontent.com/dune-project/dune-grid/3d878e2f01ed2577fd9f784bff32dc47ce09f1cb/doc/grids/amiramesh/hybrid-testgrid-2d.am
+and, according to https://github.com/dune-project/dune-grid/blob/master/COPYING
+, this is licensed by the GNU General Public Licence v2 or later.
