@@ -78,7 +78,7 @@ is_bytedata_key = Matcher(re_bytedata_key)
 re_float = re.compile(br'^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$')
 is_number = Matcher(re_float)
 
-re_name = re.compile(br'^[a-zA-Z0-9]+(\[\d\])?$')
+re_name = re.compile(br'^[a-zA-Z0-9_]+(\[\d\])?$')
 is_name = Matcher(re_name)
 
 re_quoted_whitespace_splitter = re.compile(br'(".*")|[ \t\n]')
