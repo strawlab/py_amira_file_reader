@@ -147,6 +147,10 @@ class Tokenizer:
                     self.file_info = {'type':'AmiraMesh',
                                       'version':'2.0',
                                       'is_binary':False}
+                elif token[0] == TOKEN_COMMENT and token[1]=='# AmiraMesh BINARY-LITTLE-ENDIAN 2.1':
+                    self.file_info = {'type':'AmiraMesh',
+                                      'version':'2.1',
+                                      'is_binary':True}
                 else:
                     warnings.warn('Unknown file type. Parsing may fail.')
             yield token
