@@ -27,6 +27,8 @@ TOKEN_ENDMARKER = 'endmarker'
 TOKEN_BYTEDATA_INFO = 'bytedata_info'
 TOKEN_BYTEDATA = 'bytedata'
 
+BINARY_DEFAULT = False # If not specified in initial comment, treat file as binary?
+
 dtypes = {'Vertices':np.float32,
           'Triangles':np.int32,
       }
@@ -115,7 +117,7 @@ class Tokenizer:
     def __init__( self, fileobj ):
         self.buf = fileobj.read()
         self.last_tokens = []
-        self.file_info = None
+        self.file_info = {}
         self._bytedata = {}
         self.defines = {}
     def add_defines(self, define_dict ):
@@ -168,7 +170,7 @@ class Tokenizer:
                 n_elements = int(self.last_tokens[-2][1])
 
                 if self.file_info['type']=='HyperSurface':
-                    if self.file_info['is_binary']:
+                    if self.file_info.get('is_binary',BINARY_DEFAULT):
                         sizeof_element = 3*4 # 3x floats, 4 bytes per float
                         n_bytes = n_elements * sizeof_element
 
@@ -261,14 +263,14 @@ class Tokenizer:
                             for key in self.defines:
                                 dim = self.defines[key]
                                 break
-                            if self.file_info['is_binary']:
+                            if self.file_info.get('is_binary',BINARY_DEFAULT):
                                 encoding='raw'
                                 assert len(dim)==3
                                 size=dim[0]*dim[1]*dim[2]
                             else:
                                 size = None
 
-                        if self.file_info['is_binary']:
+                        if self.file_info.get('is_binary',BINARY_DEFAULT):
                             binary_buf, self.buf = self.buf[:size], self.buf[size:]
 
                             if encoding=='raw':
