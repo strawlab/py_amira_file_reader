@@ -1,5 +1,9 @@
+#!/usr/bin/env python
+from __future__ import print_function
+
 import py_amira_file_reader.read_amira as read_amira
 import numpy as np
+import sys
 
 import vtk
 import argparse
@@ -10,22 +14,25 @@ def show_file(fname,gpu=False):
     merged = {}
     for row in dlist:
         merged.update(row)
+    if 'data' not in merged:
+        print('Only binary .am files are supported',file=sys.stderr)
+        sys.exit(1)
     buf = merged['data']
+    if type(buf)!=str:
+        print('Only binary .am files are supported',file=sys.stderr)
+        sys.exit(1)
     arr = np.fromstring( buf, dtype=np.uint8 )
     os = merged['define']['Lattice']
     arr.shape = os[2], os[1], os[0]
     arr = np.swapaxes(arr, 0, 2)
 
-    if 1:
-        id2name = {}
-        id2color = {}
+    dictRGB = {}
+    if 'Materials' in merged['Parameters']:
         tdict = merged['Parameters']['Materials']
         for name in tdict:
             namedict=tdict[name]
             this_id = namedict['Id']
-            id2name[this_id] = name
-            id2color[this_id] = namedict.get('Color',[1.0,1.0,1.0])
-        dictRGB= id2color
+            dictRGB[this_id] = namedict.get('Color',[1.0,1.0,1.0])
 
     if 1:
         # from http://www.vtk.org/Wiki/VTK/Examples/Python/vtkWithNumpy
@@ -51,14 +58,18 @@ def show_file(fname,gpu=False):
         # Opacity of the different volumes (between 0.0 and 1.0)
         volOpacityDef = 0.25
 
-        if 1:
-            funcColor = vtk.vtkColorTransferFunction()
-
-            for idx in id2color.keys():
+        funcColor = vtk.vtkColorTransferFunction()
+        if len(dictRGB):
+            for idx in dictRGB.keys():
                 funcColor.AddRGBPoint(idx,
-                                      id2color[idx][0],
-                                      id2color[idx][1],
-                                      id2color[idx][2])
+                                      dictRGB[idx][0],
+                                      dictRGB[idx][1],
+                                      dictRGB[idx][2])
+        else:
+            maxval = float(np.max( arr ))
+            print('Automatically scaling to maximum value %f'%maxval)
+            funcColor.AddRGBPoint(  0.0, 0.0, 0.0, 0.0)
+            funcColor.AddRGBPoint( maxval, 1.0, 1.0, 1.0)
 
         if 1:
             funcOpacityScalar = vtk.vtkPiecewiseFunction()
