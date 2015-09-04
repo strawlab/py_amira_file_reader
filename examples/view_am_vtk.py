@@ -91,6 +91,9 @@ def show_file(fname,gpu=False):
                 mapperVolume.SetVolumeRayCastFunction(funcRayCast)
             else:
                 mapperVolume = vtk.vtkGPUVolumeRayCastMapper()
+                mapperVolume.SetBlendModeToMaximumIntensity();
+                mapperVolume.SetSampleDistance(0.1)
+                mapperVolume.SetAutoAdjustSampleDistances(0)
 
             mapperVolume.SetInputConnection(dataImporter.GetOutputPort())
 
