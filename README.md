@@ -14,5 +14,9 @@ Use from the command line to convert a .surf file to a .obj file:
 
     python -m py_amira_file_reader.surf_to_obj filename.surf
 
+  Use from the command line to convert a .am file to a .nrrd file:
+
+      python -m py_amira_file_reader.am_to_nrrd filename.am
+
 See also the tests and example scripts in the `tests/` and `examples/`
 directories.
