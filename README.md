@@ -12,7 +12,7 @@ Use from Python (2.7 or 3.x):
 
 Use from the command line to convert a .surf file to a .obj file:
 
-    python -m py_amira_file_reader.amira_to_obj filename.surf
+    python -m py_amira_file_reader.surf_to_obj filename.surf
 
 See also the tests and example scripts in the `tests/` and `examples/`
 directories.

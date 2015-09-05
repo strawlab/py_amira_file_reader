@@ -1,6 +1,6 @@
 import os, tempfile, shutil
 from test_reader import get_data_path
-from py_amira_file_reader.amira_to_obj import amira_to_obj
+from py_amira_file_reader.surf_to_obj import surf_to_obj
 
 def test_convert_surf():
     fname = 'tetrahedron.surf'
@@ -9,7 +9,7 @@ def test_convert_surf():
     outdir = tempfile.mkdtemp()
     try:
         output_filename = os.path.join(outdir,fname)+'.obj'
-        amira_to_obj(data_path, output_filename)
+        surf_to_obj(data_path, output_filename)
         actual = open(output_filename,mode='r').readlines()
     finally:
         shutil.rmtree(outdir)

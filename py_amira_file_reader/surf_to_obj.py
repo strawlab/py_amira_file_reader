@@ -9,7 +9,7 @@ def write_verts(fd, arr, key):
     for row in arr:
         fd.write( key + ' '+ str_from_vec(row) + '\n' )
 
-def amira_to_obj(input_filename, output_filename):
+def surf_to_obj(input_filename, output_filename):
     results = read_amira.read_amira( input_filename )
     assert results['info']['type']=='HyperSurface'
     with open(output_filename,mode='w') as fd:
@@ -22,4 +22,4 @@ def amira_to_obj(input_filename, output_filename):
 if __name__=='__main__':
     input_filename = sys.argv[1]
     obj_filename = input_filename + '.obj'
-    amira_to_obj(input_filename, obj_filename)
+    surf_to_obj(input_filename, obj_filename)
