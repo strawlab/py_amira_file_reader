@@ -17,14 +17,7 @@ def show_file(fname,gpu=False):
     if 'data' not in merged:
         print('Only binary .am files are supported',file=sys.stderr)
         sys.exit(1)
-    buf = merged['data']
-    if type(buf)!=str:
-        print('Only binary .am files are supported',file=sys.stderr)
-        sys.exit(1)
-    arr = np.fromstring( buf, dtype=np.uint8 )
-    os = merged['define']['Lattice']
-    arr.shape = os[2], os[1], os[0]
-    arr = np.swapaxes(arr, 0, 2)
+    arr = merged['data']
 
     dictRGB = {}
     if 'Materials' in merged['Parameters']:
@@ -49,8 +42,8 @@ def show_file(fname,gpu=False):
         # must be told this is the case.
         dataImporter.SetNumberOfScalarComponents(1)
 
-        dataImporter.SetDataExtent (0, os[2]-1, 0, os[1]-1, 0, os[0]-1)
-        dataImporter.SetWholeExtent(0, os[2]-1, 0, os[1]-1, 0, os[0]-1)
+        dataImporter.SetDataExtent (0, arr.shape[0]-1, 0, arr.shape[1]-1, 0, arr.shape[2]-1)
+        dataImporter.SetWholeExtent(0, arr.shape[0]-1, 0, arr.shape[1]-1, 0, arr.shape[2]-1)
 
     if 1:
         # from https://pyscience.wordpress.com/2014/11/16/volume-rendering-with-python-and-vtk/

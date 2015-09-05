@@ -41,11 +41,11 @@ def check_am(fname):
         if 'define' in row:
             size = row['define']['Lattice']
         if 'data' in row:
-            if size is not None:
-                cum = 1
-                for dim_size in size:
-                    cum = cum*dim_size
-                assert len(row['data'])==cum
+            arr = row['data']
+            if type(size)==int:
+                assert len(arr)==size
+            else:
+                assert arr.shape == tuple(size)
     assert size is not None
 
 def test_parse_ascii_mesh():

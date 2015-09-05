@@ -269,6 +269,7 @@ class Tokenizer:
                                 size=dim[0]*dim[1]*dim[2]
                             else:
                                 size = None
+                        shape = self.defines.get('Lattice',None)
 
                         if self.file_info.get('is_binary',BINARY_DEFAULT):
                             binary_buf, self.buf = self.buf[:size], self.buf[size:]
@@ -281,6 +282,10 @@ class Tokenizer:
                                 raw_buf = rle_decompress(binary_buf)
                             else:
                                 raise ValueError('unknown encoding %r'%encoding)
+
+                            arr = np.fromstring( raw_buf, dtype=np.uint8 )
+                            arr.shape = shape[2], shape[1], shape[0]
+                            arr = np.swapaxes(arr, 0, 2)
                         else:
                             # ascii encoded file
                             raw_buf = []
@@ -302,8 +307,9 @@ class Tokenizer:
 
                                 raw_buf.append( elements )
                                 line_idx += 1
+                            arr = np.array(raw_buf)
 
-                        yield (  TOKEN_BYTEDATA, {'data':raw_buf},  (lineno,startcol), (lineno, endcol), this_line )
+                        yield (  TOKEN_BYTEDATA, {'data':arr},  (lineno,startcol), (lineno, endcol), this_line )
                     else:
                         raise NotImplementedError( 'cannot tokenize part %r (line %r)'%(lim_repr(part), lim_repr(this_line)) )
         yield ( TOKEN_ENDMARKER, '', (lineno,0), (lineno, 0), '' )
