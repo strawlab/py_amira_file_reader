@@ -286,10 +286,10 @@ class Tokenizer:
                             raw_buf = []
                             line_idx = 0
                             while 1:
-                                lsize = self.buf.index('\n')+1
+                                lsize = self.buf.index(b'\n')+1
                                 lbuf, self.buf = self.buf[:lsize], self.buf[lsize:]
                                 lbuf = lbuf.strip()
-                                if lbuf=='':
+                                if lbuf==b'':
                                     # done with this section
                                     break
                                 elements = []
