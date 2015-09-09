@@ -5,7 +5,7 @@ import py_amira_file_reader.read_amira as read_amira
 import numpy as np
 import sys
 
-import nrrd # from https://github.com/mhe/pynrrd.git
+import nrrd # called pynrrd on PyPI
 
 import argparse
 
