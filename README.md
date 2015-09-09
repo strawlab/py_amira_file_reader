@@ -1,4 +1,4 @@
-# py_amira_file_reader [![Build Status](https://travis-ci.org/strawlab/py_amira_file_reader.png?branch=master)](https://travis-ci.org/strawlab/py_amira_file_reader)
+# py_amira_file_reader [![Build Status](https://travis-ci.org/strawlab/py_amira_file_reader.png?branch=master)](https://travis-ci.org/strawlab/py_amira_file_reader) [![Coverage Status](https://coveralls.io/repos/strawlab/py_amira_file_reader/badge.svg?branch=master&service=github)](https://coveralls.io/github/strawlab/py_amira_file_reader?branch=master)
 
 Read Amira files (AmiraMesh 3D and HyperSurface) in Python.
 
