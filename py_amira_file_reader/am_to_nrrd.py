@@ -9,14 +9,7 @@ import nrrd # called pynrrd on PyPI
 
 import argparse
 
-def convert_file(fname):
-    csv_fname = fname+'.csv'
-    nrrd_fname = fname+'.nrrd'
-    for test_fname in [csv_fname, nrrd_fname]:
-        if os.path.exists(test_fname):
-            print('ERROR: will not overwrite output file %r'%test_fname, file=sys.stderr)
-            sys.exit(1)
-
+def convert_file(fname,csv_fname,nrrd_fname):
     data = read_amira.read_amira( fname )
     dlist = data['data']
     merged = {}
@@ -39,7 +32,17 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('FILE', type=str, help='The file to show')
     args = parser.parse_args()
-    convert_file(args.FILE)
+
+    fname = args.FILE
+    csv_fname = fname+'.csv'
+    nrrd_fname = fname+'.nrrd'
+
+    for test_fname in [csv_fname, nrrd_fname]:
+        if os.path.exists(test_fname):
+            print('ERROR: will not overwrite output file %r'%test_fname, file=sys.stderr)
+            sys.exit(1)
+
+    convert_file( fname, csv_fname, nrrd_fname)
 
 if __name__=='__main__':
     main()
