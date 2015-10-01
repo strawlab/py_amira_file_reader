@@ -13,6 +13,8 @@ except ImportError:
 import zlib
 import warnings
 
+import collections
+
 TOKEN_NAME = 'name'
 TOKEN_NUMBER = 'number'
 TOKEN_STRING = 'string'
@@ -423,7 +425,7 @@ def atom( src, token, tokenizer, level=0, block_descent=False ):
 
         elements = [e for e in elements if e is not None]
         dbgprn('%sATOM LEVEL %d: done, elements %r'%(space, level, elements))
-        result = {}
+        result = collections.OrderedDict()
         for element in elements:
             if isinstance(element,dict):
                 for key in element:
