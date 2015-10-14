@@ -98,13 +98,13 @@ def rle_decompress(buf):
     idx = 0
     buflen = len(buf)
     while idx < buflen:
-        control_byte = ord(buf[idx])
+        control_byte = ord(buf[idx:idx+1])
         idx += 1
         if control_byte==0:
             break
         elif control_byte <= 127:
             repeats = control_byte
-            new_byte = buf[idx]
+            new_byte = buf[idx:idx+1]
             idx += 1
             result.append( new_byte*repeats )
         else:
@@ -112,7 +112,7 @@ def rle_decompress(buf):
             new_bytes = buf[idx:idx+num_bytes]
             idx += num_bytes
             result.append( new_bytes )
-    final_result = ''.join(result)
+    final_result = b''.join(result)
     return final_result
 
 class Tokenizer:
