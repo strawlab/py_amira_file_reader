@@ -1,1 +1,2 @@
 .docker-meteor-local
+*.egg-info
